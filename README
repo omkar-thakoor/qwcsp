@@ -1,0 +1,177 @@
+WCSPLift
+========
+
+WCSPLift is a program that relates to the Constraint Composite Graph for the WCSP. This version is
+applicable only on the Boolean WCSP.
+
+The source repository has two important branches: The master branch, which works only for the
+Boolean WCSP, and the high-domain-clique branch, which also works for the non-Boolean WCSP. While
+the latter is more generally applicable, in general, the former can be deemed more efficient on the
+Boolean WCSP. Make sure you have downloaded from the desired branch.
+
+Dependencies
+------------
+
+To build the source code, you'll need set up the following dependencies:
+
+- A C++ compiler that supports C++ 11 (the code is known to build with gcc 4.9+)
+- A POSIX-compliant system
+- BLAS
+- The boost library
+- The Gurobi optimizer
+- cmake (build dependency only)
+
+Build
+-----
+
+To build the binary executable, you can follow the standard cmake project building procedure:
+
+    cd /path/to/the/root/of/the/source/tree
+    cmake .
+    cmake-gui .  # (or `ccmake .`) adjust build options
+    make
+
+Keep in mind that if you are not developing WCSPLift, you probably want to change the
+"CMAKE_BUILD_TYPE" build option to "Release" to build a more optimized executable.
+
+To build the documentation (optional), please read doc/README.
+
+Usage
+-----
+
+The executable will be put under the "bin" directory named "wcsp". Run the executable with the
+`--help` option to view available options.
+
+The default input file format is DIMACS <http://graphmod.ics.uci.edu/group/WCSP_file_format>. See
+format.txt for details.
+
+As a shortcut, to solve a WCSP instance using message passing on the Constraint Composite Graph,
+simply use the following command:
+
+    wcsp -m m [input-file]
+
+References
+----------
+
+- Hong Xu, T. K. Satish Kumar, and Sven Koenig. The Nemhauser-Trotter reduction and lifted message passing for the weighted CSP. In Proceedings of the 14th International Conference on Integration of Artificial Intelligence and Operations Research Techniques in Constraint Programming (CPAIOR), 387–402. 2017. doi:10.1007/978-3-319-59776-8_31.
+
+- Hong Xu, Sven Koenig, and T. K. Satish Kumar. A constraint composite graph-based ILP encoding of the Boolean weighted CSP. In Proceedings of the 23rd International Conference on Principles and Practice of Constraint Programming (CP). 2017.
+
+Requesting Help Regarding the Build Procedure and Basic Usage
+-------------------------------------------------------------
+
+How?
+~~~~
+
+To request help regarding the build procedure and basic usage, please open a new issue at the issue
+tracker <https://gitlab.com/xuphys/wcsp-solver/issues> and I will respond you there. Please avoid
+using other means such as email. All such requests shall be dismissed if they are not initiated on
+the issue tracker. The rationales are as follows:
+
+- The answers to these questions are often valuable to anyone else who may be in a similar
+  situation. An issue tracker facilitates the reuse of these answers.
+- An issue tracker makes the management much easier.
+
+When opening a new issue, please make sure that you have provided sufficient details, such as the
+details of the error message and the steps that you made to produce them. Please also label the type
+of the issue in the "Labels" field. Please try to avoid screenshots if possible, since texts are
+much more easily searchable. For example, copy and paste command line input and output instead of
+taking a screenshot of the terminal window. Please also keep mind to not post private personal
+information, as I may not be able to delete them and this issue tracker is publicly accessible.
+
+What Can I ask?
+~~~~~~~~~~~~~~~
+
+For questions, please post them only if they are on the build procedure or basic usage of WCSPLift
+on the issue tracker. Unfortunately, I am always very busy and too many questions are likely to
+degrade the quality of my answers. For this reason, I will dismiss quesitons on the issue tracker if
+they fall into any of the following categories:
+
+- Questions that have already been clearly answered in README and past issues (Before openning a new
+  issue, please carefully read this README once, search existing issues, and make sure that your
+  question has not been answered.)
+- Questions on basic command line usage (Try search the Internet.)
+- Questions on how to install and configure dependencies (Try search the Internet.)
+- Questions on related research questions (These questions should be sent to relevant parties, which
+  may include me, commonly via email.)
+
+An exception to this list is clarification questions of text in the README. For example, there are
+some details on how to deal with Gurobi in the FAQ section. While questions on installing and
+configuring Gurobi falls into the category "Questions on how to install and configure dependencies,"
+clarification questions on Gurobi-related text in README shall be accepted.
+
+How do I Request In-Person or Phone Help?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I will always only respond to questions initiated on the issue tracker. When you see a sufficiently
+high probability that the issue cannot be resolved on the issue tracker, please make an in-person or
+phone help request **on the issue tracker**. I will respond to your request there and then we will
+switch to emails for meeting details, because, in this way, future in-person and phone help
+requester can gain some understanding on the situations in which such requests shall be approved.
+Any in-person or phone help request without any associated issue numbers shall be dismissed.
+
+FAQ
+---
+
+Q: How to install the dependencies?
+
+A: You can install the dependencies using your favorite approaches. If you have never installed
+dependencies, try to use a software package manager for your system.
+
+Q: F88k Gurobi! The compiler/linker always complains something about it!
+
+I agree with you :P. Gurobi unfortunately does not provide a reliable way for the cmake build script
+to automatically detect it during the build process. Therefore, you'll need to manually set it up.
+If you are not sure about how to do it, here is a script that I use myself and should work on most
+POSIX-compatible shells:
+
+    export GUROBI_HOME="$HOME/.local/opt/gurobi/linux64"  # replace this with your own Gurobi installation directory
+    export PATH="${PATH}:${GUROBI_HOME}/bin"
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GUROBI_HOME}/lib"  # Remove this line if on MacOS
+    export LIBRARY_PATH="${LIBRARY_PATH}:${GUROBI_HOME}/lib"
+    export INCLUDE="${INCLUDE}:${GUROBI_HOME}/include"
+    export C_INCLUDE_PATH="${C_INCLUDE_PATH}:${GUROBI_HOME}/include"
+    export CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${GUROBI_HOME}/include"
+
+You can save this file (for example, named `setup.sh`) and source it when you plan to use WCSPLift
+in a shell session.
+
+Many "experts" on the Internet often proudly teach you a trick to "just" put these kinds of lines to
+your shell initialization scripts, such as `.profile`, `.bashrc`, or `.bashrc`, for the sake of
+convenience. I highly recommend you not to do so, since this will effectively enable Gurobi's
+included libraries system-widely or user-widely, and this can potentially cause you trouble if there
+is a conflict with your system libraries and the ones with the same names shipped by Gurobi. (Gurobi
+includes a lot of libraries that are of versions that are different from the ones installed in your
+system.)
+
+Q: I'm on MacOS and my compiler complains about a missing file named "cblas.h." How do I fix this?
+
+Consider the solution that makes use of openblas from Homebrew (modified from
+https://stackoverflow.com/a/35638559/1150462 ):
+
+    brew uninstall openblas; brew install --fresh -vd openblas
+    cmake -DCMAKE_CXX_FLAGS="-I$(brew --prefix openblas)/include" .
+
+Q: The executable I built seems slow even on small problem instances. Why?
+
+While there is certainly a possibility that the reason lies in the nature of the problem instances,
+often this is simply caused by the fact that you did not change the CMAKE_BUILD_TYPE build option to
+"Release."
+
+License
+-------
+
+Copyright (c) 2016-2018 Hong Xu
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

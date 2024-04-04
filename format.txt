@@ -1,0 +1,58 @@
+First line: <Name> <Number of variables (N)> <Maximum domain size>
+<Number of constraints> <Global upper bound of weights (greater than the
+maximum weight of all constraints)>
+
+Second line: <Domain size of variable 0> ... <Domain size of variable N-1>
+
+Starting from the 3rd line, constraints are listed one after another.
+
+For each constraint,
+
+First line: <Arity of constraint> <index of 1st variable in the
+constraint> ... <index of last variable in the constraint> <Default
+weight> <Number of tuples with weights different from the default weight>
+
+Starting from the second line of each constraint, each weight is listed
+per line.
+
+<value assigned to the first variable> <value assigned to the second
+variable> ... <value assigned to the last variable> <weight of this tuple>
+
+For example, the WCSP on the 5th page of the slides
+http://files.hong.me/papers/xu2017-slides.pdf  (All lines starting with
+# are my comments. They won't appear in the real files.)
+
+# Problem description
+Whatever 3 2 6 2
+# Domain sizes
+2 2 2
+#First unary constraint
+1 0 0 2
+0 0.7
+1 0.2
+# Second unary constraint
+1 1 0 2
+0 0.3
+1 0.8
+# Third unary constraint
+1 2 0 2
+0 0.1
+1 1.0
+# First binary constraint
+2 0 1 0 4
+0 0 0.5
+0 1 0.6
+1 0 0.7
+1 1 0.3
+# Second binary constraint
+2 0 2 0 4
+0 0 0.6
+0 1 1.3
+1 0 1.0
+1 1 1.1
+# Third binary constraint
+2 1 2 0 4
+0 0 0.4
+0 1 0.9
+1 0 0.7
+1 1 0.8

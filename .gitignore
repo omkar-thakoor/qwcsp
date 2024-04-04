@@ -1,0 +1,11 @@
+/build
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+tests/
+results/
+lib/
+bin/
+.vscode/
+.dependencygraph/setting.json
